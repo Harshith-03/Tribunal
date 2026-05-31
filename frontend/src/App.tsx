@@ -11,7 +11,7 @@ export default function App() {
   const [client, setClient] = useState<any>();
   const [cfg, setCfg] = useState<any>();
   const [vendors, setVendors] = useState<Record<string, any>>({});
-  const { state, run, reset } = useEngagement();
+  const { state, run, runCustom, reset } = useEngagement();
 
   useEffect(() => {
     fetchClients().then(setClients).catch(() => {});
@@ -27,6 +27,12 @@ export default function App() {
     if (!selected) return;
     fetchClient(selected).then(setClient).catch(() => {});
     run(selected);
+  };
+
+  const beginCustom = (form: { name: string; brief: string; file?: File | null }) => {
+    // show what we can locally; needs/constraints arrive via SSE after extraction
+    setClient({ name: form.name, raw_brief: form.brief || undefined });
+    runCustom(form);
   };
 
   return (
@@ -55,6 +61,7 @@ export default function App() {
           selected={selected}
           onSelect={setSelected}
           onRun={begin}
+          onRunCustom={beginCustom}
           running={state.running}
         />
       ) : (

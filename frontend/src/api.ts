@@ -33,6 +33,21 @@ export async function startEngagement(clientId: string): Promise<string> {
   return data.engagement_id;
 }
 
+export async function startCustomEngagement(form: {
+  name: string;
+  brief: string;
+  file?: File | null;
+}): Promise<string> {
+  const fd = new FormData();
+  fd.append("name", form.name || "Uploaded Client");
+  fd.append("brief", form.brief || "");
+  if (form.file) fd.append("file", form.file);
+  const r = await fetch(`${API}/engagement/custom`, { method: "POST", body: fd });
+  if (!r.ok) throw new Error((await r.json()).detail || "upload failed");
+  const data = await r.json();
+  return data.engagement_id;
+}
+
 /** Open the SSE stream; calls onEvent for each event, onClose at the end. */
 export function streamEngagement(
   engagementId: string,

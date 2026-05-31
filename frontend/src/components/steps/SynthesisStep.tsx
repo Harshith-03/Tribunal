@@ -11,7 +11,7 @@ export default function SynthesisStep({ state }: { state: EngagementState }) {
     <div>
       <StepHeader
         stage="Stage 03 · Synthesis"
-        title="Resolving conflicts, assembling the deliverable"
+        title="Executive Preview"
         dek="A lead-consultant agent reconciles the specialists into one report — and tags every claim with the agent that produced it."
       />
 

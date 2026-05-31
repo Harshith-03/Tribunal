@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { startEngagement, streamEngagement } from "./api";
+import { startCustomEngagement, startEngagement, streamEngagement } from "./api";
 import type {
   AgentState,
   Conviction,
@@ -156,14 +156,25 @@ function reducer(state: EngagementState, action: Action): EngagementState {
 export function useEngagement() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
 
-  const run = useCallback(async (clientId: string) => {
+  const begin = useCallback(async (starter: () => Promise<string>) => {
     dispatch({ kind: "reset" });
-    const id = await startEngagement(clientId);
+    const id = await starter();
     dispatch({ kind: "start", id });
     streamEngagement(id, (e) => dispatch({ kind: "event", e }));
   }, []);
 
+  const run = useCallback(
+    (clientId: string) => begin(() => startEngagement(clientId)),
+    [begin]
+  );
+
+  const runCustom = useCallback(
+    (form: { name: string; brief: string; file?: File | null }) =>
+      begin(() => startCustomEngagement(form)),
+    [begin]
+  );
+
   const reset = useCallback(() => dispatch({ kind: "reset" }), []);
 
-  return { state, run, reset };
+  return { state, run, runCustom, reset };
 }

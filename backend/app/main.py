@@ -5,13 +5,13 @@ import asyncio
 import json
 import uuid
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from . import config
-from .data_loader import clients, vendors
+from .data_loader import clients, register_custom_client, vendors
 from .events import registry
 from .orchestrator import RESULTS, orchestrate
 from .weave_setup import init_weave, trace_url
@@ -78,6 +78,53 @@ async def start_engagement(req: StartRequest):
     # fire-and-forget; events stream over SSE
     asyncio.create_task(orchestrate(engagement_id, req.client_id))
     return {"engagement_id": engagement_id}
+
+
+def _extract_text(filename: str, content: bytes) -> str:
+    """Get plain text from an uploaded brief (.txt/.md decode, .pdf via pypdf)."""
+    name = (filename or "").lower()
+    if name.endswith(".pdf"):
+        import io
+        from pypdf import PdfReader
+
+        reader = PdfReader(io.BytesIO(content))
+        return "\n".join((page.extract_text() or "") for page in reader.pages).strip()
+    return content.decode("utf-8", errors="ignore").strip()
+
+
+@app.post("/engagement/custom")
+async def start_custom_engagement(
+    name: str = Form("Uploaded Client"),
+    brief: str = Form(""),
+    file: UploadFile | None = File(None),
+):
+    """Start an engagement from a user-supplied brief (pasted text or a file)."""
+    text = brief.strip()
+    if file is not None:
+        text = _extract_text(file.filename or "brief.txt", await file.read()) or text
+    if not text:
+        raise HTTPException(400, "No brief text provided.")
+
+    engagement_id = uuid.uuid4().hex[:12]
+    custom_id = "custom-" + engagement_id
+    # register a stub; the orchestrator extracts the full ground-truth profile
+    register_custom_client({
+        "id": custom_id,
+        "name": name.strip() or "Uploaded Client",
+        "industry": "Custom engagement",
+        "size": "—",
+        "raw_brief": text,
+        "needs": [],
+        "hard_constraints": [],
+        "budget_usd": None,
+        "required_stakeholders": [],
+        "is_trap": False,
+        "_custom": True,
+        "_extracted": False,
+    })
+    registry.create(engagement_id)
+    asyncio.create_task(orchestrate(engagement_id, custom_id))
+    return {"engagement_id": engagement_id, "client_id": custom_id}
 
 
 @app.get("/engagement/{engagement_id}/stream")

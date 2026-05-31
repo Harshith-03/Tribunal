@@ -59,9 +59,13 @@ def _mock_requirements(client: dict, naive: bool) -> dict:
         "budget_usd": client.get("budget_usd"),
         "required_stakeholders": client.get("required_stakeholders", []),
         "summary": (
-            f"{client['name']} ({client['industry']}) wants to pursue: "
+            f"{client['name']} ({client.get('industry', '')}) wants to pursue: "
             + ", ".join(client.get("needs", []))
-            + f". First-year budget ~${client.get('budget_usd', 0):,.0f}."
+            + (
+                f". First-year budget ~${client['budget_usd']:,.0f}."
+                if client.get("budget_usd")
+                else "."
+            )
         ),
     }
 
@@ -128,6 +132,89 @@ def _pain(need: str) -> str:
             break
     n = n[:1].upper() + n[1:] if n else n
     return f"{n} is manual and slow today, limiting speed and scale"
+
+
+PROFILE_SYS = (
+    "You are a senior consulting analyst. Read the client brief and extract a "
+    "complete, accurate client profile. Capture EVERY hard constraint the brief "
+    "states or implies — especially deployment model (on-prem/cloud/hybrid), "
+    "data residency, and compliance certifications (e.g. HIPAA, SOC 2). This "
+    "profile is the ground truth other agents will be held to."
+)
+
+PROFILE_TMPL = (
+    "Client brief:\n\"\"\"\n{brief}\n\"\"\"\n\n"
+    "Return ONLY JSON with keys: name (string), industry (string), size (string), "
+    "needs (list of short strings), hard_constraints (list of {{type, value, "
+    "description}} where type is one of deployment|data_residency|compliance), "
+    "budget_usd (number or null), required_stakeholders (list of strings)."
+)
+
+
+def _parse_budget(text: str) -> float | None:
+    """Best-effort budget extraction from free text (e.g. $900,000 / 900k / $2M)."""
+    import re
+
+    mult = {"k": 1e3, "m": 1e6, "million": 1e6, "bn": 1e9, "billion": 1e9}
+    patterns = [
+        r"\$\s*([\d][\d,\.]*)\s*(k|m|million|bn|billion)?",
+        r"budget[^\d]{0,24}([\d][\d,\.]*)\s*(k|m|million|bn|billion)?",
+        r"([\d][\d,\.]*)\s*(k|m|million|bn|billion)\b",
+    ]
+    for pat in patterns:
+        m = re.search(pat, text, re.I)
+        if not m:
+            continue
+        try:
+            val = float(m.group(1).replace(",", ""))
+        except ValueError:
+            continue
+        suffix = (m.group(2) or "").lower()
+        val *= mult.get(suffix, 1)
+        if val >= 1000:  # ignore stray small numbers
+            return round(val)
+    return None
+
+
+async def build_profile_from_brief(brief: str, name: str | None, meter: CostMeter) -> dict:
+    """Thorough extraction → a ground-truth client profile from a free-text brief."""
+    import re
+    from .. import data_loader  # local import to avoid cycle at module load
+
+    fallback = {
+        "name": name or "Uploaded Client",
+        "industry": "",
+        "size": "",
+        "needs": [],
+        "hard_constraints": [],
+        "budget_usd": None,
+        "required_stakeholders": [],
+    }
+    messages = [
+        {"role": "system", "content": PROFILE_SYS},
+        {"role": "user", "content": PROFILE_TMPL.format(brief=brief)},
+    ]
+    raw = await call_model("intake", messages, meter, agent="intake",
+                           json_mode=True, max_tokens=900, mock_response=fallback)
+    data = parse_json_safe(raw, fallback)
+
+    cid = "custom-" + re.sub(r"[^a-z0-9]+", "-", (name or "client").lower()).strip("-")[:24]
+    cid = f"{cid}-{len(data_loader.CUSTOM_CLIENTS) + 1}"
+    return {
+        "id": cid,
+        "name": data.get("name") or name or "Uploaded Client",
+        "industry": data.get("industry", "") or "Custom engagement",
+        "size": data.get("size", "") or "—",
+        "raw_brief": brief,
+        "needs": data.get("needs", []) or ["Adopt AI to modernize operations"],
+        "hard_constraints": [
+            c for c in data.get("hard_constraints", []) if isinstance(c, dict)
+        ],
+        "budget_usd": data.get("budget_usd") or _parse_budget(brief),
+        "required_stakeholders": data.get("required_stakeholders", []),
+        "is_trap": False,
+        "_custom": True,
+    }
 
 
 def _build_document(client, needs, constraints, budget, stakeholders) -> IntakeDocument:

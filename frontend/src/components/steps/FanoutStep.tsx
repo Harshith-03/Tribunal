@@ -31,7 +31,7 @@ export default function FanoutStep({ state }: { state: EngagementState }) {
     <div>
       <StepHeader
         stage="Stage 02 · Specialists"
-        title="Three agents work in parallel"
+        title="Synchronized Orchestration"
         dek="Each specialist tackles one part of the problem on its own model, then hands its finding to Synthesis."
       />
 

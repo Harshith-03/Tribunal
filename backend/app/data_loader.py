@@ -18,7 +18,17 @@ def clients() -> list[dict]:
     return _load("clients.json")["clients"]
 
 
+# user-uploaded briefs become custom clients, registered at runtime
+CUSTOM_CLIENTS: dict[str, dict] = {}
+
+
+def register_custom_client(profile: dict) -> None:
+    CUSTOM_CLIENTS[profile["id"]] = profile
+
+
 def client_by_id(client_id: str) -> dict | None:
+    if client_id in CUSTOM_CLIENTS:
+        return CUSTOM_CLIENTS[client_id]
     return next((c for c in clients() if c["id"] == client_id), None)
 
 

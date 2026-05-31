@@ -6,8 +6,9 @@ emitting SSE stage events the whole way. Holds run state in-memory (no DB).
 from __future__ import annotations
 
 from .cost_governor import BudgetExceeded, CostMeter
-from .data_loader import client_by_id
+from .data_loader import client_by_id, register_custom_client
 from .events import EngagementBus, registry
+from .worker.intake import build_profile_from_brief
 from .schemas import EngagementResult
 from .tribunal.conviction import convict
 from .tribunal.hard_scorers import run_hard_scorers
@@ -53,6 +54,19 @@ async def orchestrate(engagement_id: str, client_id: str) -> None:
     RESULTS[eid] = result
 
     try:
+        # ---- PROFILING (custom uploaded brief only) ----
+        # Build the ground-truth profile from the brief before the worker runs.
+        if client.get("_custom") and not client.get("_extracted"):
+            bus.emit("stage_started", eid, {"stage": "intake"})
+            profile = await build_profile_from_brief(
+                client.get("raw_brief", ""), client.get("name"), meter
+            )
+            for k in ("name", "industry", "size", "needs", "hard_constraints",
+                      "budget_usd", "required_stakeholders"):
+                client[k] = profile[k]
+            client["_extracted"] = True
+            register_custom_client(client)
+
         # ---- WORKER ----
         worker_out, trace_ui_url = await _run_worker_traced(eid, client, meter, bus)
         result.requirements = worker_out.requirements

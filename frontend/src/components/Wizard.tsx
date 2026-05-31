@@ -60,7 +60,7 @@ export default function Wizard({
           <button onClick={onReset} className="kicker hover:text-oxblood">
             ← New
           </button>
-          <Ctx label="Client" value={clientName} />
+          <Ctx label="Client" value={state.requirements?.client_name || clientName} />
           <Ctx
             label="Budget"
             value={state.requirements?.budget_usd ? fmtUsd(state.requirements.budget_usd) : undefined}
