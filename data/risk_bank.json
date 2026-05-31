@@ -1,0 +1,32 @@
+{
+  "_comment": "Known-risk reference for the SOFT risk scorer. The LLM judge uses these as a checklist: a high-quality proposal should surface and mitigate the relevant risks for the scenario. Keyed by client id, plus a generic bank.",
+  "generic": [
+    "Model drift / degradation of accuracy over time without monitoring",
+    "Vendor lock-in and exit costs",
+    "Insufficient change management / user adoption",
+    "Hidden integration costs with legacy systems",
+    "Lack of human-in-the-loop for high-stakes decisions"
+  ],
+  "by_client": {
+    "meridian-insurer": [
+      "PHI leakage if any processing touches third-party cloud (HIPAA breach)",
+      "Bias in fraud detection leading to wrongful claim denials and regulatory exposure",
+      "On-prem hardware capacity and maintenance burden underestimated",
+      "Auditability: claims decisions must be explainable to regulators",
+      "Data residency violation if backups or telemetry leave the US"
+    ],
+    "northwind-retail": [
+      "Dynamic pricing triggering price-discrimination / fairness complaints",
+      "Forecasting failures during demand shocks (e.g. promotions, seasonality)",
+      "Customer-assistant hallucination giving wrong product or returns info",
+      "PII handling in customer support transcripts"
+    ],
+    "atlas-bank": [
+      "Credit-risk model bias creating fair-lending (ECOA) violations",
+      "Model explainability required for adverse-action notices",
+      "Core banking data exposure in multi-tenant cloud",
+      "SOC 2 scope gaps if vendor cert excludes the relevant trust criteria",
+      "Regulatory model-risk-management (SR 11-7) documentation burden"
+    ]
+  }
+}

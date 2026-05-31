@@ -1,0 +1,65 @@
+{
+  "clients": [
+    {
+      "id": "meridian-insurer",
+      "name": "Meridian Mutual Insurance",
+      "industry": "Insurance (mid-size health & life)",
+      "size": "1,200 employees",
+      "raw_brief": "We're Meridian Mutual, a mid-size regional health and life insurer. We want to use AI to speed up claims adjudication and improve fraud detection across our member base. We process a lot of sensitive member records every day, and because of our regulatory posture all member PII has to stay on infrastructure we control — we are not permitted to move protected health information into third-party clouds. Everything needs to be HIPAA compliant and data must remain in the United States. Our first-year budget for this initiative is $2,000,000. Any proposal will be reviewed by our CISO and our Chief Compliance Officer before sign-off, and our Claims Operations Lead needs to own rollout.",
+      "needs": [
+        "Automated claims adjudication",
+        "Fraud / anomaly detection on claims",
+        "Document intake and classification"
+      ],
+      "hard_constraints": [
+        { "type": "deployment", "value": "on-prem", "description": "All processing of member PII must run on on-premise infrastructure. Cloud-only tools are disqualified." },
+        { "type": "data_residency", "value": "US", "description": "All data must reside within the United States." },
+        { "type": "compliance", "value": "HIPAA", "description": "Solution must be HIPAA compliant." }
+      ],
+      "budget_usd": 2000000,
+      "required_stakeholders": ["CISO", "Chief Compliance Officer", "Claims Operations Lead"],
+      "is_trap": true,
+      "trap_note": "The on-prem / no-cloud-PII constraint is stated mid-brief. A naive Intake agent often drops it, after which the Vendor agent recommends a cloud-only tool — a HIPAA/deployment compliance violation that Tribunal must attribute back to Intake, not Vendor."
+    },
+    {
+      "id": "northwind-retail",
+      "name": "Northwind Retail Group",
+      "industry": "Omnichannel retail",
+      "size": "5,000 employees",
+      "raw_brief": "Northwind Retail Group is a national omnichannel retailer. We want AI to power demand forecasting, dynamic pricing, and a customer-facing support assistant. We're cloud-first and happy with SaaS. Budget is $750,000 for year one. We need our VP of Merchandising and our Head of Customer Experience involved, plus a Data Platform Lead.",
+      "needs": [
+        "Demand forecasting",
+        "Dynamic pricing optimization",
+        "Customer support assistant"
+      ],
+      "hard_constraints": [
+        { "type": "deployment", "value": "cloud", "description": "Cloud / SaaS deployment is acceptable and preferred." },
+        { "type": "data_residency", "value": "any", "description": "No specific data residency requirement." }
+      ],
+      "budget_usd": 750000,
+      "required_stakeholders": ["VP of Merchandising", "Head of Customer Experience", "Data Platform Lead"],
+      "is_trap": false,
+      "trap_note": "Control case: no on-prem constraint, generous fit. Used to show Tribunal returns a clean scorecard with no convictions."
+    },
+    {
+      "id": "atlas-bank",
+      "name": "Atlas Federal Bank",
+      "industry": "Regional banking",
+      "size": "3,400 employees",
+      "raw_brief": "Atlas Federal Bank is a regional bank. We want AI for credit-risk modeling and an internal knowledge assistant for our relationship managers. We operate under strict financial regulation — any vendor must hold SOC 2 Type II and be deployable in a hybrid or on-prem model; we will not put core banking data in a public multi-tenant cloud. Budget is a firm $1,000,000. Required reviewers: Chief Risk Officer, Head of Regulatory Affairs, and Head of IT Security.",
+      "needs": [
+        "Credit-risk modeling",
+        "Internal knowledge assistant for relationship managers"
+      ],
+      "hard_constraints": [
+        { "type": "deployment", "value": "hybrid-or-on-prem", "description": "Must support hybrid or on-prem deployment. Public multi-tenant cloud is disqualified for core banking data." },
+        { "type": "compliance", "value": "SOC2-Type-II", "description": "Vendor must hold SOC 2 Type II certification." },
+        { "type": "data_residency", "value": "US", "description": "Data must reside within the United States." }
+      ],
+      "budget_usd": 1000000,
+      "required_stakeholders": ["Chief Risk Officer", "Head of Regulatory Affairs", "Head of IT Security"],
+      "is_trap": true,
+      "trap_note": "Secondary trap: budget is tight relative to a premium on-prem vendor; can trigger a cost/budget hard violation in addition to compliance."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "_comment": "Baseline stakeholder roles a complete consulting proposal must assign, by industry. The Tribunal stakeholder-assignment hard scorer checks the proposal covers each client's required_stakeholders (from clients.json) plus any industry baseline below.",
+  "industry_baseline": {
+    "Insurance (mid-size health & life)": ["Executive Sponsor", "CISO", "Compliance Officer", "Operations Lead"],
+    "Omnichannel retail": ["Executive Sponsor", "Data Platform Lead", "Business Owner"],
+    "Regional banking": ["Executive Sponsor", "Chief Risk Officer", "Head of IT Security", "Regulatory Affairs"]
+  },
+  "all_known_roles": [
+    "Executive Sponsor",
+    "CISO",
+    "Chief Compliance Officer",
+    "Compliance Officer",
+    "Claims Operations Lead",
+    "Operations Lead",
+    "VP of Merchandising",
+    "Head of Customer Experience",
+    "Data Platform Lead",
+    "Business Owner",
+    "Chief Risk Officer",
+    "Head of Regulatory Affairs",
+    "Regulatory Affairs",
+    "Head of IT Security",
+    "Project Manager"
+  ]
+}

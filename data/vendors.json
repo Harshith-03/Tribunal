@@ -1,0 +1,112 @@
+{
+  "vendors": [
+    {
+      "id": "claritas-cloud",
+      "name": "Claritas AI Cloud",
+      "category": "Claims automation / document AI",
+      "price_usd": 480000,
+      "deployment": "cloud",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US", "EU"],
+      "available": true,
+      "availability_note": "GA, onboarding in 4 weeks",
+      "blurb": "Fast cloud-native claims automation with strong document extraction. Cloud-only — no on-prem option."
+    },
+    {
+      "id": "sentinel-onprem",
+      "name": "Sentinel OnPrem Suite",
+      "category": "Claims automation / fraud detection",
+      "price_usd": 920000,
+      "deployment": "on-prem",
+      "compliance_certs": ["HIPAA", "SOC2-Type-II"],
+      "data_residency": ["US"],
+      "available": true,
+      "availability_note": "GA, on-prem install 8-10 weeks",
+      "blurb": "Enterprise on-prem claims and fraud platform. HIPAA-ready, deploys entirely inside the customer datacenter."
+    },
+    {
+      "id": "veritas-hybrid",
+      "name": "Veritas Hybrid Risk",
+      "category": "Fraud / risk modeling",
+      "price_usd": 610000,
+      "deployment": "hybrid",
+      "compliance_certs": ["HIPAA", "SOC2-Type-II"],
+      "data_residency": ["US"],
+      "available": true,
+      "availability_note": "GA",
+      "blurb": "Hybrid fraud and risk modeling: sensitive data stays on-prem, compute can burst to a private cloud."
+    },
+    {
+      "id": "ledgerlogic-onprem",
+      "name": "LedgerLogic Credit Engine",
+      "category": "Credit-risk modeling (banking)",
+      "price_usd": 1350000,
+      "deployment": "on-prem",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US"],
+      "available": true,
+      "availability_note": "GA, install 12 weeks",
+      "blurb": "Premium on-prem credit-risk modeling platform for regulated banks. Powerful but expensive."
+    },
+    {
+      "id": "ledgerlogic-hybrid",
+      "name": "LedgerLogic Credit Engine (Hybrid)",
+      "category": "Credit-risk modeling (banking)",
+      "price_usd": 890000,
+      "deployment": "hybrid",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US"],
+      "available": true,
+      "availability_note": "GA, install 9 weeks",
+      "blurb": "Hybrid edition of the LedgerLogic credit engine; core data on-prem, lower total cost."
+    },
+    {
+      "id": "nimbus-forecast",
+      "name": "Nimbus Forecast Cloud",
+      "category": "Demand forecasting / pricing",
+      "price_usd": 320000,
+      "deployment": "cloud",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US", "EU", "APAC"],
+      "available": true,
+      "availability_note": "GA",
+      "blurb": "Cloud-native demand forecasting and dynamic pricing for retail."
+    },
+    {
+      "id": "helpdesk-genie",
+      "name": "Helpdesk Genie",
+      "category": "Customer support assistant",
+      "price_usd": 180000,
+      "deployment": "cloud",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US", "EU"],
+      "available": true,
+      "availability_note": "GA",
+      "blurb": "Conversational customer-support assistant, SaaS."
+    },
+    {
+      "id": "vault-knowledge",
+      "name": "Vault Knowledge Assistant",
+      "category": "Internal knowledge assistant",
+      "price_usd": 240000,
+      "deployment": "hybrid",
+      "compliance_certs": ["SOC2-Type-II"],
+      "data_residency": ["US"],
+      "available": true,
+      "availability_note": "GA",
+      "blurb": "Internal RAG knowledge assistant with on-prem connectors for regulated industries."
+    },
+    {
+      "id": "quantum-claims",
+      "name": "Quantum Claims (beta)",
+      "category": "Claims automation",
+      "price_usd": 260000,
+      "deployment": "on-prem",
+      "compliance_certs": ["HIPAA"],
+      "data_residency": ["US"],
+      "available": false,
+      "availability_note": "Closed beta — not generally available until Q4",
+      "blurb": "Cheap on-prem claims tool, but still in closed beta (availability hard-fail)."
+    }
+  ]
+}

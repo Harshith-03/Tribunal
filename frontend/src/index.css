@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #f7f4ef;
+  /* faint paper grain via layered radial gradients */
+  background-image: radial-gradient(
+      1100px 700px at 85% -5%,
+      rgba(123, 45, 38, 0.05),
+      transparent 60%
+    ),
+    radial-gradient(900px 600px at 0% 110%, rgba(15, 110, 99, 0.04), transparent 55%);
+  color: #1a1714;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  /* mono kicker / eyebrow label */
+  .kicker {
+    @apply font-mono text-[11px] uppercase tracking-kicker text-muted;
+  }
+  /* big serif display heading */
+  .display {
+    @apply font-display font-medium leading-[1.05] tracking-tight text-ink;
+  }
+  /* hairline rule */
+  .rule {
+    @apply border-0 border-t border-line;
+  }
+  /* understated link */
+  .link {
+    @apply text-oxblood underline decoration-oxblood/30 underline-offset-4 transition hover:decoration-oxblood;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2dcd1;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #cfc6b6;
+}
+
+/* print: clean white report */
+@media print {
+  body {
+    background: #fff;
+  }
+}

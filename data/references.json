@@ -1,0 +1,34 @@
+{
+  "_comment": "Authoritative reference links the consulting deliverable cites so the client can verify compliance claims.",
+  "compliance": {
+    "HIPAA": {
+      "title": "HIPAA — U.S. Dept. of Health & Human Services",
+      "url": "https://www.hhs.gov/hipaa/index.html",
+      "note": "Federal standard governing the protection of Protected Health Information (PHI). Requires administrative, physical, and technical safeguards; on-prem deployment keeps PHI inside the covered entity's control boundary."
+    },
+    "SOC2-Type-II": {
+      "title": "AICPA SOC 2 — Trust Services Criteria",
+      "url": "https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2",
+      "note": "Independent attestation of a vendor's controls for security, availability, processing integrity, confidentiality, and privacy over a period of time (Type II)."
+    }
+  },
+  "data_residency": {
+    "US": {
+      "title": "Data residency — keeping data within the United States",
+      "url": "https://www.nist.gov/privacy-framework",
+      "note": "All primary storage, backups, and telemetry must remain within US jurisdiction to satisfy the residency constraint."
+    }
+  },
+  "frameworks": [
+    {
+      "title": "NIST AI Risk Management Framework (AI RMF 1.0)",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "note": "Voluntary framework for managing risks of AI systems across govern, map, measure, and manage functions — the backbone of the governance plan below."
+    },
+    {
+      "title": "NIST SP 800-53 — Security & Privacy Controls",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+      "note": "Control catalog used to harden on-prem deployments handling sensitive data."
+    }
+  ]
+}
